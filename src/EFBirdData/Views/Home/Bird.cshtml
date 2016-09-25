@@ -1,0 +1,30 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@model EFBirdData.Models.Bird
+
+<div class="container">
+    <h1>Birds</h1>
+    <hr />
+    <ul>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    Panel With title
+                </h3>
+            </div>
+
+            <div class="panel-body">
+                Panel content
+            </div>
+        </div>
+        <li>
+            @Model.CommonName: @Model.PrimaryColor.Name : Country: @Model.Sightings.ToList()[0].Place.Country
+        </li>
+
+
+    </ul>
+</div>
+
+
+
