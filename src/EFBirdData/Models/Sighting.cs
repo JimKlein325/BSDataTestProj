@@ -13,10 +13,12 @@ namespace EFBirdData.Models
     {
         [Key]
         public int Id { get; set; }
+        public DateTime SightingDate { get; set; }
 
         public int BirdId { get; set; }
         public Bird Bird { get; set; }
         public string ObserverFirstName { get; set; }
+        public string ObserverLastName { get; set; }
         public int PlaceId { get; set; }
         public virtual Place Place { get; set; }
 

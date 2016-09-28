@@ -8,9 +8,10 @@ using EFBirdData.Models;
 namespace EFBirdData.Migrations
 {
     [DbContext(typeof(EFBirdDbContext))]
-    partial class EFBirdDbContextModelSnapshot : ModelSnapshot
+    [Migration("20160926215307_AddBirdManagerUpdates")]
+    partial class AddBirdManagerUpdates
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
             modelBuilder
                 .HasAnnotation("ProductVersion", "1.0.0-rtm-21431")

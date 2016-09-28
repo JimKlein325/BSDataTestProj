@@ -1,0 +1,72 @@
+﻿
+    <html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+
+        <script>
+            $(document).ready(function () {
+                $("#search-by-status").submit(function (event) {
+                    event.preventDefault();
+                    console.log("button click");
+                    $.ajax ({
+                        type: "POST",
+                        data: $(this).serialize(),
+                        dataType: "html",
+                        url: '@Url.Action("Report")',
+                        success: function (result) {
+                            console.log('#conservationStatus')
+                            console.log(result);
+                            $("#report-table").html(result);
+                        }
+                    });
+                });
+            });
+        </script>
+    </head>
+    <body>
+
+        <h2>Create a report showing sighting for a specified conservation status</h2>
+
+        <form method="post" class="form-horizontal" id="search-by-status">
+
+            <div class="form-group">
+
+                <label for="Status" class="col-md-2 control-label">Status</label>
+
+                <div class="col-md-6">
+
+                    <select name="conservationStatus" id="conservationStatus">
+                        <option selected="selected" value=0>Endangered</option>
+                        <option value=1>CriticallyEngandered</option>
+                        <option value=1>NearThreatened</option>
+                        <option value=1>Vulnerable</option>
+                        <option value=1>CriticallyEngandered</option>
+                    </select>
+
+                </div>
+
+            </div>
+
+            <div class="form-group">
+
+                <div class="col-md-offset-2 col-md-10">
+
+                    <input type="submit" value="Build Report" class="btn btn-default" />
+
+                </div>
+
+            </div>
+
+        </form>
+
+
+        <hr />
+
+      
+
+        <div class="cart">
+            <div id="report-table"></div>
+            <div id="total-price"></div>
+        </div>
+    </body>
+</html>
