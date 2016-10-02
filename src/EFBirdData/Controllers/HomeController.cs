@@ -28,6 +28,9 @@ namespace EFBirdData.Controllers
         public IActionResult SightingReport( string conservationStatus )//ViewModels.ReportResultViewModel vm ) //List<ReportItem> items)
         {
             var birds = BirdRepository.LoadBirds();
+            var importedBirds = BirdRepository.LoadImportedBirds();
+
+
 
             var endangeredStatuses = birds.Select(b => b.ConservationStatus)
             .Distinct();
@@ -46,6 +49,8 @@ namespace EFBirdData.Controllers
             {
                 resultList.Add(new ReportItem() { Status = item.Status, Count = item.Sightings });
             }
+
+
             //return RedirectToActionResult("SightingReport", resultList);
             //var resultArray = resultList.ToArray();
 
@@ -63,16 +68,19 @@ namespace EFBirdData.Controllers
             return RedirectToAction("SightingReport", null);
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            var birds = BirdRepository.LoadBirds();
-            var bird = birds.First();
-            var thisBird = BirdManager.BuildModelBirdFromRepo(bird, db);
+            //var birds = BirdRepository.LoadBirds();
+            //var bird = birds.Skip(1).Take(1).First();
+            //var thisBird = BirdManager.BuildModelBirdFromRepo(bird, db);
 
             //var moreBirds = BirdRepository.LoadImportedBirds();
+            //var birdManager = new BirdManager(db);
+            //await birdManager.EnsureSeedData();
 
+            var birds = db.Birds.ToList().Take(20);
+            //var thisBird = birds.ToList().First( b => b.CommonName == "Abert's Towhee");
 
-            //var thisBird = db.Birds.Take(2);
             //.Include(birds => birds.Sightings)
             //.ThenInclude(birds => birds.Place)
             //.Include(experiences => experiences.PrimaryColor)
@@ -80,17 +88,19 @@ namespace EFBirdData.Controllers
             //.Include(experiences => experiences.BirdsTernaryColors)
             //.ThenInclude(experiences => experiences.TernaryColor)
             //.FirstOrDefault(experiences => experiences.Id == 1);
-            return View(new List<EFBirdData.Models.Bird>() { thisBird });
+
+
+            return View(birds);
         }
         public IActionResult Bird(int Id)
         {
             var thisBird = db.Birds
-                    .Include(birds => birds.Sightings)
-                    .ThenInclude(birds => birds.Place)
-                    .Include(experiences => experiences.PrimaryColor)
-                    .Include(experiences => experiences.SecondaryColor)
-                    .Include(experiences => experiences.BirdsTernaryColors)
-                    .ThenInclude(experiences => experiences.TernaryColor)
+                    //.Include(birds => birds.Sightings)
+                    //.ThenInclude(birds => birds.Place)
+                    //.Include(experiences => experiences.PrimaryColor)
+                    //.Include(experiences => experiences.SecondaryColor)
+                    //.Include(experiences => experiences.BirdsTernaryColors)
+                    //.ThenInclude(experiences => experiences.TernaryColor)
                     .FirstOrDefault(experiences => experiences.Id == Id);
             return View(thisBird);
         }

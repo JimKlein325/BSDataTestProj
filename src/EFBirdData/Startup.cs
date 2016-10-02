@@ -45,7 +45,7 @@ namespace EFBirdData
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, EFBirdDbContext db)
         {
             app.UseDeveloperExceptionPage();
 
@@ -74,6 +74,8 @@ namespace EFBirdData
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
+            var birdManager = new BirdManager(db);
+            birdManager.EnsureSeedData().Wait();
         }
     }
 }

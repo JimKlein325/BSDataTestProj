@@ -231,9 +231,6 @@ namespace BirdWatcher
             birds.Add(new Bird(utility, "Flycatcher", "Black-and-white Monjita", "Xolmis dominicanus", 20, 23, 54, 1, "Black", "White", "", "Argentina|Brazil|Uruguay", "Vulnerable", "VU"));
             birds.Add(new Bird(utility, "Piper", "Yungas Manakin", "Chiroxiphia boliviana", 18, 25, 53, 4, "Black", "", "", "Peru|Bolivia", "LeastConcern", "LC"));
             birds.Add(new Bird(utility, "Heron", "Reddish Egret", "Egretta rufescens", 132, 230, 730, 1, "Red", "Brown", "", "Bahamas|United States|Mexico", "NearThreatened", "NT"));
-            birds.Add(new Bird(utility, "Kingbird", "Loggerhead Kingbird", "Tyrannus caudifasciatus", 23, 38, 42.5, 14, "Brown", "", "", "United States|Mexico", "LeastConcern", "LC"));
-            birds.Add(new Bird(utility, "Sparrow", "Golden-crowned Sparrow", "Zonotrichia atricapilla", 18.4, 24, 28.35, 9, "", "", "", "", "LeastConcern", "LC"));
-            birds.Add(new Bird(utility, "Cuckoo", "Common Cuckoo", "Cuculus canorus", 33, 66, 141.7, 11, "Black", "White", "Grey", "", "LeastConcern", "LC"));
 
             return birds;
         }

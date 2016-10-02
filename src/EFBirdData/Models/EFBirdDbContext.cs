@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFBirdData.Models
 {
-    public class EFBirdDbContext: DbContext
+    public class EFBirdDbContext: DbContext, IEFBirdDbContext
     {
         public DbSet<Bird> Birds { get; set; }
 
@@ -18,6 +18,8 @@ namespace EFBirdData.Models
         public DbSet<Place> Places { get; set; }
         public DbSet<PrimaryColor> PrimaryColors { get; set; }
         public DbSet<SecondaryColor> SecondaryColors { get; set; }
+        public DbSet<TernaryColor> TernaryColors { get; set; }
+
         public DbSet<BirdsTernaryColors> BirdsTernaryColors { get; set; }
 
         //public EFBirdDbContext(DbContextOptions<EFBirdDbContext> options)

@@ -5,14 +5,52 @@ using System.Text;
 using System.Threading.Tasks;
 using EFBirdData.Models;
 using Microsoft.EntityFrameworkCore;
+using BirdWatcher;
+using System.Diagnostics;
 
 namespace EFBirdData.Models
 {
-    public static class BirdManager
+    public class BirdManager
     {
 
-        public static string[] Colors = new string[] { "Pink", "Blue", "Green", "Brown", "Black", "White", "Red", "Orange", "Yellow" };
-        public static Bird BuildModelBirdFromRepo(BirdWatcher.Bird birdIn, EFBirdDbContext context)
+        public List<string> Colors = new List<string>();//{ "Pink", "Blue", "Green", "Brown", "Black", "White", "Red", "Orange", "Yellow" };
+
+        private EFBirdDbContext _context;
+
+        public BirdManager(IEFBirdDbContext context)
+        {
+            _context = (EFBirdDbContext)context;
+        }
+        public async Task EnsureSeedData()
+        {
+
+            if (!_context.Birds.Any())
+            {
+                _context.Birds.RemoveRange(_context.Birds);
+                _context.Places.RemoveRange(_context.Places);
+                _context.BirdsPlaces.RemoveRange(_context.BirdsPlaces);
+                _context.Sightings.RemoveRange(_context.Sightings);
+                _context.BirdsTernaryColors.RemoveRange(_context.BirdsTernaryColors);
+                _context.TernaryColors.RemoveRange(_context.TernaryColors);
+
+                await _context.SaveChangesAsync();
+
+                var birds = BirdRepository.LoadBirds();
+                var moreBirds = BirdRepository.LoadImportedBirds();
+                var allBirds = birds.Union(moreBirds);//.Take(2);
+
+
+                foreach (var bird in allBirds)
+                {
+                    Debug.WriteLine(bird.CommonName);
+                    await BuildModelBirdFromRepo(bird);
+                    await _context.SaveChangesAsync();
+                }
+
+                //await _context.SaveChangesAsync();
+            }
+        }
+        public async Task BuildModelBirdFromRepo(BirdWatcher.Bird birdIn)
         {
             var newBird = new EFBirdData.Models.Bird()
             {
@@ -29,8 +67,8 @@ namespace EFBirdData.Models
                 ConservationCode = birdIn.ConservationCode
             };
             //add to context
-            context.Birds.Add(newBird);
-            context.SaveChanges();
+            _context.Birds.Add(newBird);
+            await _context.SaveChangesAsync();
 
             foreach (var sighting in birdIn.Sightings)
             {
@@ -43,7 +81,7 @@ namespace EFBirdData.Models
 
 
                 //Test if place exists
-                var place = context.Places.FirstOrDefault(p => p.Country == sighting.Place.Country);
+                var place = _context.Places.FirstOrDefault(p => p.Country == sighting.Place.Country);
                 if (place == null)
                 {
                     var newPlace = new Place()
@@ -51,8 +89,8 @@ namespace EFBirdData.Models
                         Country = sighting.Place.Country
                         //other properties never set in Repo data, ignore here
                     };
-                    context.Places.Add(newPlace);
-                    context.SaveChanges();
+                    _context.Places.Add(newPlace);
+                    await _context.SaveChangesAsync();
                     newSighting.PlaceId = newPlace.Id;
                     newSighting.Place = newPlace;
 
@@ -64,18 +102,18 @@ namespace EFBirdData.Models
                     newSighting.Place = place;
                 }
                 //add to context
-                context.Sightings.Add(newSighting);
-                context.SaveChanges();
+                _context.Sightings.Add(newSighting);
+                await _context.SaveChangesAsync();
 
-                context.Entry(newSighting).State = EntityState.Modified;
-                context.SaveChanges();
+                _context.Entry(newSighting).State = EntityState.Modified;
+                await _context.SaveChangesAsync();
 
             }
 
             //Habitats
             foreach (var habitat in birdIn.Habitats)
             {
-                var place = context.Places.FirstOrDefault(p => p.Country == habitat.Country);
+                var place = _context.Places.FirstOrDefault(p => p.Country == habitat.Country);
                 if (place == null)
                 {
                     var newPlace = new Place()
@@ -83,18 +121,18 @@ namespace EFBirdData.Models
                         Country = habitat.Country
                         //other properties never set in Repo data, ignore here
                     };
-                    context.Places.Add(newPlace);
-                    context.SaveChanges();
+                    _context.Places.Add(newPlace);
+                    await _context.SaveChangesAsync();
                     var newBP = new BirdsPlaces() { BirdId = newBird.Id, PlaceId = newPlace.Id };
-                    context.BirdsPlaces.Add(newBP);
-                    context.SaveChanges();
+                    _context.BirdsPlaces.Add(newBP);
+                    await _context.SaveChangesAsync();
 
                 }
                 else
                 {
                     var newBP = new BirdsPlaces() { BirdId = newBird.Id, PlaceId = place.Id };
-                    context.BirdsPlaces.Add(newBP);
-                    context.SaveChanges();
+                    _context.BirdsPlaces.Add(newBP);
+                    await _context.SaveChangesAsync();
 
                 }
                 //var newBirdsPlaces = new BirdsPlaces() { BirdId = newBird.Id, PlaceId = place.Id };
@@ -103,32 +141,49 @@ namespace EFBirdData.Models
             }
             foreach (var color in birdIn.TertiaryColors)
             {
-                var colorIndex = BirdManager.FindColorIndex(color);
-                BirdsTernaryColors tColor = new BirdsTernaryColors()
+                if (color != "")
                 {
-                    BirdId = newBird.Id,
-                    TernaryColorId = colorIndex
-                };
-                if (colorIndex != -1)
-                {
-                    context.Add(tColor);
-                    context.SaveChanges();
+                    var tColor = _context.TernaryColors.FirstOrDefault(c => c.Name == color);
+                    //if (colorIndex == -1)
+                    //{
+                    //    Colors.Add(color);
+                    //    colorIndex = Colors.Count();
+
+                    //}
+                    if (true)
+                    {
+
+                    }
+                    if (tColor == null)
+                    {
+                        tColor = new TernaryColor() { Name = color };
+                        _context.TernaryColors.Add(tColor);
+                        await _context.SaveChangesAsync();
+                    }
+
+                    BirdsTernaryColors birdTColor = new BirdsTernaryColors()
+                    {
+                        BirdId = newBird.Id,
+                        TernaryColorId = tColor.Id
+                    };
+                        _context.BirdsTernaryColors.Add(birdTColor);
+                        await _context.SaveChangesAsync();
 
                 }
             }
-            
-        //update bird entity
-        context.Entry(newBird).State = EntityState.Modified;
-            context.SaveChanges();
 
-            return newBird;
-      }
-        public static Place FindPlace(string country)
+            //update bird entity
+            _context.Entry(newBird).State = EntityState.Modified;
+            await _context.SaveChangesAsync();
+
+            //return newBird;
+        }
+        public Place FindPlace(string country)
         {
             return new Place();
         }
 
-        public static int FindColorIndex (string color)
+        public int FindColorIndex(string color)
         {
             int colorIndex = -1;
             for (int i = 0; i < Colors.Count(); i++)
@@ -138,5 +193,5 @@ namespace EFBirdData.Models
             return colorIndex;
         }
     }
-   
+
 }
