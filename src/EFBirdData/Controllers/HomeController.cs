@@ -8,7 +8,7 @@ using EFBirdData.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using EFBirdData.ViewModels;
-
+using Microsoft.Extensions.Logging;
 
 namespace EFBirdData.Controllers
 {
@@ -20,12 +20,17 @@ namespace EFBirdData.Controllers
     public class HomeController : Controller
     {
         private EFBirdDbContext db = new EFBirdDbContext();
-        public HomeController(EFBirdDbContext context)
-        {
+        private IBSTrackerRepository _repository;
+        private ILogger<HomeController> _logger;
 
+        public HomeController(IBSTrackerRepository repository,
+            ILogger<HomeController> logger)
+        {
+            _repository = repository;
+            _logger = logger;
         }
 
-        public IActionResult SightingReport( string conservationStatus )//ViewModels.ReportResultViewModel vm ) //List<ReportItem> items)
+        public IActionResult SightingReport(string conservationStatus)//ViewModels.ReportResultViewModel vm ) //List<ReportItem> items)
         {
             var birds = BirdRepository.LoadBirds();
             var importedBirds = BirdRepository.LoadImportedBirds();
@@ -70,27 +75,24 @@ namespace EFBirdData.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var birds = BirdRepository.LoadBirds();
-            //var bird = birds.Skip(1).Take(1).First();
-            //var thisBird = BirdManager.BuildModelBirdFromRepo(bird, db);
-
-            //var moreBirds = BirdRepository.LoadImportedBirds();
-            //var birdManager = new BirdManager(db);
-            //await birdManager.EnsureSeedData();
-
-            var birds = db.Birds.ToList().Take(20);
-            //var thisBird = birds.ToList().First( b => b.CommonName == "Abert's Towhee");
-
-            //.Include(birds => birds.Sightings)
-            //.ThenInclude(birds => birds.Place)
-            //.Include(experiences => experiences.PrimaryColor)
-            //.Include(experiences => experiences.SecondaryColor)
-            //.Include(experiences => experiences.BirdsTernaryColors)
-            //.ThenInclude(experiences => experiences.TernaryColor)
-            //.FirstOrDefault(experiences => experiences.Id == 1);
-
+            try
+            {
+            var birds = db.Birds
+                .Include(b => b.Sightings)
+                .SelectMany(b => b.Sightings)
+                .OrderByDescending(s => s.SightingDate)
+                .Select(s => s.Bird)
+                .Take(10);
 
             return View(birds);
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError($"Failed to get");
+                //TODO: implement error action
+                return RedirectToAction("/error");
+            }
         }
         public IActionResult Bird(int Id)
         {

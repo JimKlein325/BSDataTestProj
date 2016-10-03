@@ -39,18 +39,35 @@ namespace EFBirdData
      .AddDbContext<EFBirdDbContext>(options =>
          options.UseSqlServer(Configuration["ConnectionStrings:DefaultConnection"]));
 
+            services.AddScoped<IBSTrackerRepository, BSTrackerRepository>();
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
+
+            services.AddTransient<BirdManager>();
+
+            services.AddLogging();
 
             services.AddMvc();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory, EFBirdDbContext db)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
+            BirdManager birdManager,
+            ILoggerFactory factory,
+            EFBirdDbContext db)
         {
             app.UseDeveloperExceptionPage();
 
             loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            if (env.IsEnvironment("Development"))
+            {
+                factory.AddDebug(LogLevel.Information);
+            }
+            else
+            {
+                factory.AddDebug(LogLevel.Error);
+            }
+
+            loggerFactory.AddDebug(LogLevel.Information);
 
             app.UseApplicationInsightsRequestTelemetry();
 
@@ -74,7 +91,7 @@ namespace EFBirdData
                     name: "default",
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
-            var birdManager = new BirdManager(db);
+            
             birdManager.EnsureSeedData().Wait();
         }
     }

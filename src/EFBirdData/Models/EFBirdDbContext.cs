@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EFBirdData.Models
 {
-    public class EFBirdDbContext: DbContext, IEFBirdDbContext
+    public class EFBirdDbContext: DbContext
     {
         public DbSet<Bird> Birds { get; set; }
 

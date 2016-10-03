@@ -208,6 +208,7 @@
 --reference:C:\Users\Jim Klein\.nuget\packages\System.Xml.ReaderWriter\4.0.11\ref\netstandard1.3\System.Xml.ReaderWriter.dll
 --reference:C:\Users\Jim Klein\.nuget\packages\System.Xml.XDocument\4.0.11\ref\netstandard1.3\System.Xml.XDocument.dll
 --resource:"C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\obj\Debug\netcoreapp1.0\EFBirdDatadotnet-compile.deps.json",EFBirdData.deps.json
+C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\IBSTrackerRepository.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\IEFBirdDbContext.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Program.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Startup.cs
@@ -223,6 +224,7 @@ C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdDa
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\BirdManager.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\BirdsPlaces.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\BirdsTernaryColors.cs
+C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\BSTrackerRepository.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\EFBirdDbContext.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\Place.cs
 C:\Users\Jim Klein\Documents\Visual Studio 2015\Projects\EFBirdData\src\EFBirdData\Models\PrimaryColor.cs
