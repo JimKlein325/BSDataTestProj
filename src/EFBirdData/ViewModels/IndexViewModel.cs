@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using EFBirdData.ViewModels;
 
-namespace EFBirdData.Controllers
+namespace EFBirdData.ViewModels
 {
     public class IndexViewModel
     {

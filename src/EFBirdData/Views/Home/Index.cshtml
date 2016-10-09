@@ -1,29 +1,26 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
-@model IEnumerable<EFBirdData.Models.Bird>
+@model EFBirdData.ViewModels.IndexViewModel
+
+@Html.Partial("RecentSightings", Model.RecentSightings)
+
 
 <div class="container">
     <h1>Birds</h1>
     <hr />
-@foreach (var bird in Model)
-  {
+    @foreach (var bird in Model.Bird)
+    {
 
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">
                     @bird.CommonName,
-                    @if (@bird.Sightings != null)
-                    {
-                        @bird.Sightings.ToList()[0].SightingDate.ToString()
-
-                    }
-
                 </h3>
             </div>
-                <div class="panel-body">
-                    <a asp-action="Bird" asp-route-id="@bird.Id" >View Detail</a> 
-                </div>
+            <div class="panel-body">
+                <a asp-action="Bird" asp-route-id="@bird.Id">View Detail</a>
+            </div>
             <div class="panel-footer">
                 <form asp-controller="Account" asp-action="Login" method="post" class="form-horizontal" role="form">
                     <div class="form-group">
@@ -35,10 +32,10 @@
                 </form>
             </div>
         </div>
-   }  
-            
+    }
 
-  
+
+
 
 
 

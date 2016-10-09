@@ -77,17 +77,21 @@ namespace EFBirdData.Controllers
         {
             try
             {
-                var birds = db.Birds;
-            var birdList = db.Birds
+                var birds = db.Birds
+                            .Include(b => b.Sightings)
+                                .SelectMany(b => b.Sightings)
+                                .OrderByDescending(s => s.SightingDate);
 
-            var recentSightings = db.Birds
-                    .Include(b => b.Sightings)
-                .SelectMany(b => b.Sightings)
-                .OrderByDescending(s => s.SightingDate)
-                .Select(s => new EFBirdData.ViewModels.RecentSightingViewModel() { CommonName = s.Bird.CommonName, SightingDate = s.SightingDate.Date.ToString() })
-                .Take(3);
+                var birdList =  birds
+                                .Select(s => s.Bird)
+                               .Take(9); 
 
-            return View(new IndexViewModel() { });
+
+
+            return View(new IndexViewModel() {
+                Bird = _repository.GetAllBirds().Take(5),
+                RecentSightings = _repository.MostRecentlySightedBirds(3)
+            });
 
             }
             catch (Exception e)
