@@ -1,0 +1,11 @@
+﻿@model IEnumerable<EFBirdData.ViewModels.RecentSightingViewModel>
+<div>
+    <h2>Recent Sightings</h2>
+    <ul>
+        @foreach (var sighting in Model)
+        {
+            <li>@sighting.CommonName, @sighting.SightingDate.ToString()</li>
+        }
+    </ul>
+
+</div>

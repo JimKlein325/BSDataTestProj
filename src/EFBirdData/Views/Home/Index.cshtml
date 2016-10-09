@@ -12,8 +12,13 @@
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    @bird.CommonName
-                    
+                    @bird.CommonName,
+                    @if (@bird.Sightings != null)
+                    {
+                        @bird.Sightings.ToList()[0].SightingDate.ToString()
+
+                    }
+
                 </h3>
             </div>
                 <div class="panel-body">

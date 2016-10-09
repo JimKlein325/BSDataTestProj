@@ -77,14 +77,17 @@ namespace EFBirdData.Controllers
         {
             try
             {
-            var birds = db.Birds
-                .Include(b => b.Sightings)
+                var birds = db.Birds;
+            var birdList = db.Birds
+
+            var recentSightings = db.Birds
+                    .Include(b => b.Sightings)
                 .SelectMany(b => b.Sightings)
                 .OrderByDescending(s => s.SightingDate)
-                .Select(s => s.Bird)
-                .Take(10);
+                .Select(s => new EFBirdData.ViewModels.RecentSightingViewModel() { CommonName = s.Bird.CommonName, SightingDate = s.SightingDate.Date.ToString() })
+                .Take(3);
 
-            return View(birds);
+            return View(new IndexViewModel() { });
 
             }
             catch (Exception e)

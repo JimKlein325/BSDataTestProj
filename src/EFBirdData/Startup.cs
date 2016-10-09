@@ -43,15 +43,15 @@ namespace EFBirdData
             // Add framework services.
             services.AddApplicationInsightsTelemetry(Configuration);
 
-            services.AddTransient<BirdManager>();
+            //services.AddTransient<BirdManager>();
 
             services.AddLogging();
 
-            services.AddMvc();
+            services.AddMvc();  
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory,
-            BirdManager birdManager,
+            //BirdManager birdManager,
             ILoggerFactory factory,
             EFBirdDbContext db)
         {
@@ -92,7 +92,7 @@ namespace EFBirdData
                     template: "{controller=Home}/{action=Index}/{id?}");
             });
             
-            birdManager.EnsureSeedData().Wait();
+            //birdManager.EnsureSeedData().Wait();
         }
     }
 }
