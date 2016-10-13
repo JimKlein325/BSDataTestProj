@@ -1,11 +1,25 @@
 ﻿@model IEnumerable<EFBirdData.ViewModels.RecentSightingViewModel>
-<div>
-    <h2>Recent Sightings</h2>
-    <ul>
+<div class="container  col-md-4">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                Recent Sightings
+            </h3>
+        </div>
         @foreach (var sighting in Model)
         {
-            <li>@sighting.CommonName, @sighting.SightingDate</li>
+            <div class="panel-body">
+                @sighting.CommonName, <span class="pull-right">@sighting.SightingDate</span> 
+            </div>
         }
-    </ul>
-
+        <div class="panel-footer">
+            <form asp-controller="Account" asp-action="Login" method="post" class="form-horizontal" role="form">
+                <div class="form-group">
+                    <div class="pull-right">
+                        <input type="submit" value="+" class="btn btn-sm" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using EFBirdData.ViewModels;
 
 namespace EFBirdData.Models
 {
@@ -10,6 +11,9 @@ namespace EFBirdData.Models
         Bird GetBirdByID(int id);
 
         IEnumerable<ViewModels.RecentSightingViewModel> MostRecentlySightedBirds(int birdsToReturn);
-        IOrderedQueryable<Sighting> GetSightings();
+        IQueryable<Sighting> GetSightings();
+        ViewModels.SightingsForYearReportViewModel GetSightingsForYear(int year);
+
+
     }
 }

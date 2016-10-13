@@ -10,5 +10,7 @@ namespace EFBirdData.ViewModels
         public string CommonName { get; set; }
         public string SightingDate { get; set; }
 
+        public int SightingId { get; set; }
+
     }
 }

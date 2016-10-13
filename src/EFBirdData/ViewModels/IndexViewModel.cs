@@ -10,5 +10,6 @@ namespace EFBirdData.ViewModels
     {
         public IEnumerable<EFBirdData.Models.Bird> Bird { get; set; }
         public  IEnumerable<RecentSightingViewModel> RecentSightings { get; set; }
+        public ViewModels.SightingsForYearReportViewModel ReportView { get; set; }
     }
 }
