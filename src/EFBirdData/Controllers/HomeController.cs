@@ -35,6 +35,13 @@ namespace EFBirdData.Controllers
 
             return View(sightingsData);
         }
+        public IActionResult RecentSightings()
+        {
+            var sightingsData = _repository.MostRecentlySightedBirds(6); ;
+
+            return View(sightingsData);
+        }
+
         public IActionResult SightingReport(string conservationStatus)//ViewModels.ReportResultViewModel vm ) //List<ReportItem> items)
         {
             var birds = BirdRepository.LoadBirds();
@@ -83,11 +90,19 @@ namespace EFBirdData.Controllers
             try
             {
                 var sightingsFor2016 = _repository.GetSightingsForYear(2016);
+                var recentSightings = _repository.MostRecentlySightedBirds(5);
 
                 return View(new IndexViewModel() {
                     Bird = _repository.GetAllBirds().Take(5),
-                    RecentSightings = _repository.MostRecentlySightedBirds(3),
-                    ReportView = sightingsFor2016
+                    //RecentSightings = recentSightings,
+                    ReportView = sightingsFor2016,
+                    LinkedResultTable = new LinkedTableViewModel()
+                    {
+                        TableTitle = "Recent Sightings",
+                        Controller = "Home",
+                        Action = "Bird",
+                        Items = _repository.MostRecentlySightedBirds(5).ToList()
+                    }
             });
 
             }

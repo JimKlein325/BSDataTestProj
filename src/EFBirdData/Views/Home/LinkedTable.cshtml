@@ -1,16 +1,19 @@
-﻿@model IEnumerable<EFBirdData.ViewModels.RecentSightingViewModel>
+﻿@model EFBirdData.ViewModels.LinkedTableViewModel
 <div class="container  col-md-4">
     <div class="panel panel-primary">
         <div class="panel-heading">
             <h3 class="panel-title">
-                Recent Sightings
+                @Model.TableTitle 
             </h3>
         </div>
-        @foreach (var sighting in Model)
+        @foreach (var item in Model.Items)
         {
             <div class="panel-body">
-                @sighting.CommonName <span class="pull-right">@sighting.SightingDate</span> 
-            </div>
+                <a asp-controller="@Model.Controller" asp-action="@Model.Action" asp-route-id="@item.Id">
+                     @item.Name <span class="pull-right">
+                        @item.Value
+            </span></a>
+</div>
         }
         <div class="panel-footer">
             <form asp-controller="Account" asp-action="Login" method="post" class="form-horizontal" role="form">

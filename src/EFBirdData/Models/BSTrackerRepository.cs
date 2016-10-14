@@ -29,7 +29,7 @@ namespace EFBirdData.Models
             return _context.Birds.FirstOrDefault(b => b.CommonName == name);
         }
 
-        public IEnumerable<ViewModels.RecentSightingViewModel> MostRecentlySightedBirds(int birdsToReturn)
+        public IEnumerable<Models.ResultItem> MostRecentlySightedBirds(int birdsToReturn)
         {
             IQueryable<Sighting> birds = GetSightings();
 //            var mostRecentlySightedBirds = _context.Birds 
@@ -56,10 +56,10 @@ namespace EFBirdData.Models
 //            }
 
             var recentSightings = birds
-                .Select( s => new { Name = s.Bird.CommonName, Date = s.SightingDate
+                .Select( s => new { Name = s.Bird.CommonName, Date = s.SightingDate, Id = s.Bird.Id
                 })
                 .OrderByDescending(s => s.Date as IComparable)
-                .Select(s => new EFBirdData.ViewModels.RecentSightingViewModel() { CommonName = s.Name, SightingDate = s.Date.ToString("m") })
+                .Select(s => new EFBirdData.Models.ResultItem() { Name = s.Name, Value = s.Date.ToString("m"), Id = s.Id })
                 .Take(birdsToReturn);
 
             return recentSightings;
@@ -87,7 +87,7 @@ namespace EFBirdData.Models
     )
     //.Select(grp => new { grp.Key, Count = grp.Count() })
     .OrderByDescending(g => g.Month)
-    .Select(i => new ResultItem() { Name = i.Text.FirstOrDefault(), Value = i.Text.Count() })
+    .Select(i => new ResultItem() { Name = i.Text.FirstOrDefault(), Value = i.Text.Count().ToString() })
     ;
             //     .Include(b => b.Sightings)
             //    .SelectMany(
