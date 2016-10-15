@@ -13,7 +13,6 @@ namespace EFBirdData.Models
         IEnumerable<Models.ResultItem> MostRecentlySightedBirds(int birdsToReturn);
         IQueryable<Sighting> GetSightings();
         ViewModels.SightingsForYearReportViewModel GetSightingsForYear(int year);
-
-
+        List<ResultItem> GetTopObersevers();
     }
 }

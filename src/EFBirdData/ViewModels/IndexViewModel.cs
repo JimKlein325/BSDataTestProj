@@ -12,5 +12,7 @@ namespace EFBirdData.ViewModels
        // public  IEnumerable<RecentSightingViewModel> RecentSightings { get; set; }
         public ViewModels.SightingsForYearReportViewModel ReportView { get; set; }
         public LinkedTableViewModel LinkedResultTable { get; set; }
+        public ReportResultViewModel TopObservers { get; set; }
+
     }
 }

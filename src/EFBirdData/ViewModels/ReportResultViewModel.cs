@@ -4,15 +4,17 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using EFBirdData.Controllers;
+using EFBirdData.Models;
 
 namespace EFBirdData.ViewModels
 {
     public class ReportResultViewModel
     {
-        public List<ReportItem> Items { get; set; }
+        public string Title { get; set; }
+        public List<ResultItem> Items { get; set; }
         public ReportResultViewModel()
         {
-            Items = new List<ReportItem>() { };
+            Items = new List<ResultItem>() { };
         }
     }
 }

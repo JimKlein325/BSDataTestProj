@@ -42,36 +42,16 @@ namespace EFBirdData.Controllers
             return View(sightingsData);
         }
 
-        public IActionResult SightingReport(string conservationStatus)//ViewModels.ReportResultViewModel vm ) //List<ReportItem> items)
+        public IActionResult ReportTable(ReportResultViewModel result)//ViewModels.ReportResultViewModel vm ) //List<ReportItem> items)
         {
-            var birds = BirdRepository.LoadBirds();
-            var importedBirds = BirdRepository.LoadImportedBirds();
 
+            //var reportResultViewModel = new ReportResultViewModel()
+            //{
+            //    Title = "Top Observers",
+            //    Items = _repository.GetTopObersevers()
+            //};
 
-
-            var endangeredStatuses = birds.Select(b => b.ConservationStatus)
-            .Distinct();
-
-            var result = birds.Join(endangeredStatuses,
-            b => b.ConservationStatus,
-            s => s,
-            (b, s) => new { Status = s, Sightings = b.Sightings }
-            )
-            .GroupBy(b => b.Status)
-            .Select(b => new { Status = b.Key, Sightings = b.Sum(s => s.Sightings.Count()) })
-            .ToList();
-
-            var resultList = new List<ReportItem>();// new ReportResultViewModel();
-            foreach (var item in result)
-            {
-                resultList.Add(new ReportItem() { Status = item.Status, Count = item.Sightings });
-            }
-
-
-            //return RedirectToActionResult("SightingReport", resultList);
-            //var resultArray = resultList.ToArray();
-
-            return View(resultList);// new List<ReportItem>() { item });
+            return View(result);// new List<ReportItem>() { item });
         }
         public IActionResult Report()
         {
@@ -92,6 +72,13 @@ namespace EFBirdData.Controllers
                 var sightingsFor2016 = _repository.GetSightingsForYear(2016);
                 var recentSightings = _repository.MostRecentlySightedBirds(5);
 
+                var reportResultViewModel = new ReportResultViewModel()
+                {
+                    Title = "Top Observers",
+                    Items = _repository.GetTopObersevers()
+                };
+
+
                 return View(new IndexViewModel() {
                     Bird = _repository.GetAllBirds().Take(5),
                     //RecentSightings = recentSightings,
@@ -102,7 +89,8 @@ namespace EFBirdData.Controllers
                         Controller = "Home",
                         Action = "Bird",
                         Items = _repository.MostRecentlySightedBirds(5).ToList()
-                    }
+                    },
+                    TopObservers = reportResultViewModel
             });
 
             }
