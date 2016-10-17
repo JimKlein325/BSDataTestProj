@@ -60,13 +60,13 @@ namespace EFBirdData.Models
                 .SelectMany(
                 b => b.Sightings,
                 (bird, sighting) => new { Bird = bird.CommonName, Sighting = sighting.SightingDate.Date.ToString("M"), Day = sighting.SightingDate.Date.Day, Month = sighting.SightingDate.Date.Month, MonthString = sighting.SightingDate.Date.ToString("MMM"), Year = sighting.SightingDate.Date.Year, Place = sighting.Place.Country })
-                .Where(r => r.Year == year && r.Place == "United States")
+                .Where(r => r.Year == year )
                 .GroupBy(
                 f => f.Month,
                 ms => ms.MonthString,
                 (f, ms) => new { Month = f, Text = ms, }
                 )
-                .OrderByDescending(g => g.Month)
+                .OrderBy(g => g.Month)
                 .Select(i => new ResultItem() { Name = i.Text.FirstOrDefault(), Value = i.Text.Count().ToString() })
                 ;
             return new SightingsForYearReportViewModel() { TableName = $"Sightings for {year}", Items = result };

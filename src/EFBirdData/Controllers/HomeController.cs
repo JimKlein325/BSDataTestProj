@@ -78,7 +78,6 @@ namespace EFBirdData.Controllers
                     Items = _repository.GetTopObersevers()
                 };
 
-
                 return View(new IndexViewModel() {
                     Bird = _repository.GetAllBirds().Take(5),
                     //RecentSightings = recentSightings,
